@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::stg-dlk-${env}-${datasource}-${datalake_zone}"
+            ]
+        },
+        {
+            "Action": [
+                "kms:Encrypt*",
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Effect": "Allow",
+            "Resource": "${kms_key_arn}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "logs:AssociateKmsKey",
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lakeformation:GetDataAccess"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

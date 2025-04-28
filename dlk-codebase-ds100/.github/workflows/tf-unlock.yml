@@ -1,0 +1,37 @@
+name: Terraform Unlock TFstate
+
+on:
+    workflow_dispatch:
+      inputs:
+        LOCK_ID:
+            required: true
+            type: string
+        ENV:
+            required: true
+            type: string
+        ASSUME_ROLE:
+            required: true
+            type: string
+        TF_BACKEND_PATH:
+            required: true
+            type: string
+        TF_VARS_PATH:
+            required: true
+            type: string
+        RUNNER:
+            required: true
+            type: string
+            default: "stg-int"
+jobs:
+  init_plan_sandbox:
+    name: Terraform Init and Plan Sandbox
+    uses: straumann/dlk-shared-workflows/.github/workflows/tf-dlk-unlock-tfstate.yml@main
+    with:
+        TF_VERSION: '1.5.0'
+        SHARE_MODULES_RELEASE: 'v1.0.3'
+        ENV: ${{inputs.ENV}}   
+        ASSUME_ROLE: ${{inputs.ASSUME_ROLE}}   
+        TF_BACKEND_PATH: ${{inputs.TF_BACKEND_PATH}}  
+        TF_VARS_PATH: ${{inputs.TF_VARS_PATH}}  
+        RUNNER: ${{inputs.RUNNER}}  
+        LOCK_ID: ${{inputs.LOCK_ID}} 

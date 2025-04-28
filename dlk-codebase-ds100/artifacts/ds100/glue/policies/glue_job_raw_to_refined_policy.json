@@ -1,0 +1,99 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*Object*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::stg-dlk-${env}-ds-${ds_id}-refined/*",
+                "arn:aws:s3:::stg-dlk-${env}-ds-${ds_id}-raw/*",
+                "arn:aws:s3:::stg-dlk-${env}-wheels/*",
+                "arn:aws:s3:::${bucket_artifacts}/*"                
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::stg-dlk-${env}-ds-${ds_id}-refined",
+                "arn:aws:s3:::stg-dlk-${env}-ds-${ds_id}-raw",
+                "arn:aws:s3:::stg-dlk-${env}-wheels",
+                "arn:aws:s3:::${bucket_artifacts}"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lakeformation:GetDataAccess",
+                "glue:GetSecurityConfiguration"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Action": [
+                "kms:Describe*",
+                "kms:Get*",
+                "kms:List*",
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Effect": "Allow",
+            "Resource": "${kms_key_arn}"
+        },
+        {
+            "Action": [
+                "logs:*"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:logs:eu-west-1:${account_id}:log-group:/aws-glue/jobs/*"
+        },
+        {
+            "Action": [
+                "glue:GetTables",
+                "glue:GetTable",
+                "glue:GetDatabase",
+                "glue:GetPartitions"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:glue:eu-west-1:${account_id}:database/${db_name}",
+                "arn:aws:glue:eu-west-1:${account_id}:table/${db_name}/*",
+                "arn:aws:glue:eu-west-1:${account_id}:catalog"
+            ]
+        },
+        {
+            "Action": [
+                "glue:GetTables",
+                "glue:GetTable",
+                "glue:GetDatabase",
+                "glue:GetPartitions",
+                "glue:CreateTable",
+                "glue:DeleteTable",
+                "glue:BatchCreatePartition"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:glue:eu-west-1:${account_id}:database/${refined_db_name}",
+                "arn:aws:glue:eu-west-1:${account_id}:table/${refined_db_name}/*",
+                "arn:aws:glue:eu-west-1:${account_id}:catalog"
+            ]
+        },
+        {
+            "Action": [
+                "glue:PublishDataQuality"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:glue:eu-west-1:${account_id}:dataQualityRuleset/*"
+            ]
+        }
+    ]
+}

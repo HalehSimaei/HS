@@ -1,0 +1,33 @@
+# STEP 1 - CI/CD PIPELINE FOR GITHUB ACTIONS
+# USES AWS CREDS, S3 BACKEND & ARTIFACT STORE
+
+name: Terraform EXECUTE SANDBOX
+
+on:
+  pull_request_target:
+    branches:
+      - dev
+    types:
+      - closed
+    paths-ignore:
+      - ".github/workflows/*"
+      - "README.md"
+
+
+env:
+  AWS_REGION: 'eu-west-1'
+  S3_BUCKET_NAME: 'stg-dlk-tf-states'
+  TF_VERSION: '1.5.0'
+  TF_WORKING_DIR: './terraform'
+
+jobs:
+  apply:
+    if: github.ref == 'refs/heads/dev'
+    name: Terraform Apply After Status Checked
+    uses: straumann/dlk-shared-workflows/.github/workflows/tf-dlk-apply.yml@main
+    with:
+        ENV: 'sbx'
+        TF_VERSION: '1.5.0'
+        ASSUME_ROLE: 'arn:aws:iam::816247855850:role/stg-dlk-devops'
+        TF_BACKEND_PATH: './config/sbx/backend_sbx.conf'
+        TF_VARS_PATH: './config/sbx/sandbox.tfvars'
